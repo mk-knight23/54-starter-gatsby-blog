@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ArrowRight } from 'lucide-vue-next'
 
 const articles = ref([
   { slug: 'modular-foundations', title: 'Modular Foundations in Web Design', excerpt: 'Exploring the base layer of scalable design systems.', date: 'Dec 15, 2025', category: 'Foundation' },
@@ -38,7 +37,7 @@ const articles = ref([
              <p class="text-slate-500 font-medium leading-relaxed italic">{{ article.excerpt }}</p>
           </div>
           <router-link :to="'/article/' + article.slug" class="inline-flex items-center text-[10px] font-black uppercase tracking-[0.4em] pt-8 group-hover:text-arch-accent transition-colors">
-             Examine <ArrowRight class="ml-3" :size="14" />
+             Examine <svg class="ml-3" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </router-link>
        </div>
     </section>

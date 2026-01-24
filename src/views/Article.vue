@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ArrowLeft, Share2, Compass } from 'lucide-vue-next'
 
 const props = defineProps<{ slug: string }>()
 
@@ -21,13 +20,13 @@ const article = ref({
 <template>
   <article class="max-w-4xl mx-auto px-10 py-24 space-y-20">
     <router-link to="/" class="inline-flex items-center text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 hover:text-arch-accent transition-colors">
-       <ArrowLeft class="mr-3" :size="14" /> Return to Base
+       <svg class="mr-3" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg> Return to Base
     </router-link>
 
     <header class="space-y-12">
        <div class="flex items-center space-x-6 text-[10px] font-black uppercase tracking-widest text-arch-accent">
           <span class="px-3 py-1 bg-arch-primary text-white dark:bg-white dark:text-black">Foundation 01</span>
-          <span class="flex items-center gap-1.5 italic text-slate-500"><Compass :size="12" /> Systems Exploration</span>
+          <span class="flex items-center gap-1.5 italic text-slate-500"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> Systems Exploration</span>
        </div>
        <h1 class="text-7xl md:text-9xl font-display font-black tracking-tighter leading-[0.8] uppercase text-black dark:text-white">
           {{ article.title }}
@@ -40,7 +39,9 @@ const article = ref({
                 <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest">{{ article.date }}</p>
              </div>
           </div>
-          <button class="w-14 h-14 border border-arch-border dark:border-white/10 flex items-center justify-center hover:bg-arch-accent hover:text-white transition-all"><Share2 :size="18" /></button>
+          <button class="w-14 h-14 border border-arch-border dark:border-white/10 flex items-center justify-center hover:bg-arch-accent hover:text-white transition-all" aria-label="Share article">
+             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" x2="12" y1="2" y2="15"/></svg>
+          </button>
        </div>
     </header>
 

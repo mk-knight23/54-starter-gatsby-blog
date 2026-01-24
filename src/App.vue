@@ -1,20 +1,37 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { 
-  Sun, 
-  Moon, 
-  ArrowUpRight
-} from 'lucide-vue-next'
+import { ref, onMounted } from 'vue'
 import { useHead } from '@vueuse/head'
 
 const isDarkMode = ref(true)
-const toggleTheme = () => {
-  isDarkMode.value = !isDarkMode.value
-  document.documentElement.classList.toggle('dark')
+
+const initTheme = () => {
+  const saved = localStorage.getItem('theme')
+  if (saved) {
+    isDarkMode.value = saved === 'dark'
+  } else {
+    isDarkMode.value = !window.matchMedia('(prefers-color-scheme: light)').matches
+  }
+  applyTheme()
 }
 
+const applyTheme = () => {
+  if (isDarkMode.value) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+}
+
+const toggleTheme = () => {
+  isDarkMode.value = !isDarkMode.value
+  applyTheme()
+  localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light')
+}
+
+onMounted(initTheme)
+
 useHead({
-  title: 'Architecture | Modern SSG Collective',
+  title: 'Architectural | Modern SSG Blog',
   meta: [{ name: 'description', content: 'A high-performance architectural blog built with Vue 3 and Vite SSG.' }]
 })
 </script>
@@ -37,9 +54,9 @@ useHead({
        </div>
 
        <div class="flex items-center space-x-6">
-          <button @click="toggleTheme" class="p-3 rounded-2xl bg-slate-50 dark:bg-white/5 text-slate-400 hover:text-arch-accent transition-all">
-             <Sun v-if="isDarkMode" :size="18" />
-             <Moon v-else :size="18" />
+          <button @click="toggleTheme" class="p-3 rounded-2xl bg-slate-50 dark:bg-white/5 text-slate-400 hover:text-arch-accent transition-all" :aria-label="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'">
+             <svg v-if="isDarkMode" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+             <svg v-else xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
           </button>
           <button class="bg-arch-primary dark:bg-white text-white dark:text-black px-8 py-3 rounded-none font-black uppercase tracking-widest text-[10px] shadow-2xl">Connect</button>
        </div>
@@ -72,8 +89,8 @@ useHead({
              <div class="space-y-6">
                 <p class="text-arch-accent">Social</p>
                 <div class="flex flex-col gap-4 text-slate-500">
-                   <a href="#" class="hover:text-white flex items-center transition-colors">Github <ArrowUpRight class="ml-1" :size="10" /></a>
-                   <a href="#" class="hover:text-white flex items-center transition-colors">Twitter <ArrowUpRight class="ml-1" :size="10" /></a>
+                   <a href="https://github.com/mk-knight23/57-Gatsby-Blog-Starter" target="_blank" rel="noopener noreferrer" class="hover:text-white flex items-center transition-colors">Github <svg class="ml-1" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>
+                   <a href="#" class="hover:text-white flex items-center transition-colors">Twitter <svg class="ml-1" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a>
                 </div>
              </div>
           </div>
