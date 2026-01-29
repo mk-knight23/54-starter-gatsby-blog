@@ -9,7 +9,7 @@
 
 **A brutalist web design blog starter built with Vue 3, Vite-SSG, and Tailwind CSS v4**
 
-[Live Demo](#) | [GitHub](#)
+[Live Demo](https://architectural-beta.vercel.app) | [GitHub](https://github.com/mk-knight23/57-Gatsby-Blog-Starter)
 
 </div>
 
