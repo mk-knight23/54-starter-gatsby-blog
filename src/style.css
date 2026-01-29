@@ -1,47 +1,230 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-brutal-bg: #ffffff;
+  --color-brutal-bg-dark: #000000;
+  --color-brutal-fg: #000000;
+  --color-brutal-fg-dark: #ffffff;
+  --color-brutal-accent: #ff0000;
+  --color-brutal-border: #000000;
+  --color-brutal-border-dark: #ffffff;
+
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Space Grotesk', sans-serif;
+
+  --animate-marquee: marquee 20s linear infinite;
+  --animate-blink: blink 1s step-end infinite;
+  --animate-elastic: elastic 0.5s ease-out;
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  @keyframes elastic {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+}
 
 :root {
   color-scheme: light dark;
 }
 
-body {
-  @apply bg-arch-bg text-arch-primary transition-colors duration-500 antialiased;
-  margin: 0;
-  display: block;
+* {
+  box-sizing: border-box;
+  border-radius: 0 !important;
 }
 
-.dark body {
-  @apply bg-arch-dark text-white;
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+@layer components {
+  .brutal-container {
+    @apply min-h-screen flex flex-col;
+  }
+
+  .brutal-nav {
+    @apply h-16 border-b-4 px-6 flex items-center justify-between sticky top-0 z-50;
+    background: var(--color-brutal-bg);
+    border-color: var(--color-brutal-border);
+  }
+
+  .brutal-logo {
+    @apply font-display font-black text-2xl tracking-tighter uppercase;
+    color: var(--color-brutal-fg);
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 4px;
+  }
+
+  .brutal-link {
+    @apply font-mono text-xs font-bold uppercase tracking-widest transition-all duration-100;
+    color: var(--color-brutal-fg);
+  }
+
+  .brutal-link:hover {
+    background: var(--color-brutal-fg);
+    color: var(--color-brutal-bg);
+    padding: 0.5rem 1rem;
+    margin: -0.5rem -1rem;
+  }
+
+  .brutal-button {
+    @apply px-6 py-3 font-mono text-xs font-bold uppercase tracking-widest border-2 transition-all duration-100;
+    background: var(--color-brutal-fg);
+    color: var(--color-brutal-bg);
+    border-color: var(--color-brutal-border);
+  }
+
+  .brutal-button:hover {
+    background: var(--color-brutal-bg);
+    color: var(--color-brutal-fg);
+    box-shadow: 4px 4px 0 var(--color-brutal-fg);
+    transform: translate(-2px, -2px);
+  }
+
+  .brutal-button:active {
+    transform: translate(0, 0);
+    box-shadow: none;
+  }
+
+  .brutal-card {
+    @apply border-4 p-6 transition-all duration-100;
+    background: var(--color-brutal-bg);
+    border-color: var(--color-brutal-border);
+  }
+
+  .brutal-card:hover {
+    background: var(--color-brutal-fg);
+    color: var(--color-brutal-bg);
+    box-shadow: 8px 8px 0 var(--color-brutal-border);
+    transform: translate(-4px, -4px);
+  }
+
+  .brutal-title {
+    @apply font-display font-black text-4xl md:text-6xl leading-none tracking-tighter uppercase;
+    color: var(--color-brutal-fg);
+  }
+
+  .brutal-heading {
+    @apply font-mono text-xs font-bold uppercase tracking-[0.3em];
+    color: var(--color-brutal-accent);
+  }
+
+  .brutal-divider {
+    @apply h-4 bg-brutal-border;
+  }
+
+  .brutal-grid {
+    @apply grid gap-0;
+    border: 2px solid var(--color-brutal-border);
+  }
+
+  .brutal-grid-item {
+    @apply border p-8;
+    border-color: var(--color-brutal-border);
+  }
+
+  .brutal-badge {
+    @apply inline-block px-2 py-1 font-mono text-xs font-bold uppercase bg-brutal-accent text-white;
+  }
+
+  .brutal-marquee {
+    @apply overflow-hidden whitespace-nowrap border-y-4 py-4 bg-brutal-fg text-brutal-bg;
+    border-color: var(--color-brutal-border);
+  }
+
+  .brutal-marquee-content {
+    animation: marquee 20s linear infinite;
+  }
+
+  .brutal-input {
+    @apply w-full px-4 py-3 font-mono text-sm border-2 bg-transparent;
+    border-color: var(--color-brutal-border);
+  }
+
+  .brutal-input:focus {
+    outline: none;
+    box-shadow: 4px 4px 0 var(--color-brutal-fg);
+  }
+
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.2s ease;
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
+}
+
+/* Dark mode */
+.dark {
+  .brutal-container {
+    background: var(--color-brutal-bg-dark);
+    color: var(--color-brutal-fg-dark);
+  }
+
+  .brutal-nav,
+  .brutal-card {
+    background: var(--color-brutal-bg-dark);
+    border-color: var(--color-brutal-border-dark);
+  }
+
+  .brutal-logo,
+  .brutal-link {
+    color: var(--color-brutal-fg-dark);
+  }
+
+  .brutal-button {
+    background: var(--color-brutal-fg-dark);
+    color: var(--color-brutal-bg-dark);
+    border-color: var(--color-brutal-border-dark);
+  }
+
+  .brutal-button:hover {
+    background: var(--color-brutal-bg-dark);
+    color: var(--color-brutal-fg-dark);
+    box-shadow: 4px 4px 0 var(--color-brutal-border-dark);
+  }
+
+  .brutal-card:hover {
+    background: var(--color-brutal-fg-dark);
+    color: var(--color-brutal-bg-dark);
+    box-shadow: 8px 8px 0 var(--color-brutal-border-dark);
+  }
+
+  .brutal-title {
+    color: var(--color-brutal-fg-dark);
+  }
+
+  .brutal-input {
+    border-color: var(--color-brutal-border-dark);
+    color: var(--color-brutal-fg-dark);
+  }
+
+  .brutal-input:focus {
+    box-shadow: 4px 4px 0 var(--color-brutal-fg-dark);
+  }
 }
 
 .font-display {
   font-family: 'Space Grotesk', sans-serif;
 }
 
-.font-serif {
-  font-family: 'Playfair Display', serif;
-}
-
 .font-mono {
   font-family: 'JetBrains Mono', monospace;
-}
-
-#app {
-  max-width: none;
-  margin: 0;
-  padding: 0;
-}
-
-.grid-line-h {
-  @apply border-b border-arch-border dark:border-white/5;
-}
-
-.grid-line-v {
-  @apply border-r border-arch-border dark:border-white/5;
-}
-
-.card-arch {
-  @apply bg-white dark:bg-arch-dark border border-arch-border dark:border-white/5 p-10 hover:border-arch-accent transition-all duration-500 shadow-sm hover:shadow-2xl;
 }

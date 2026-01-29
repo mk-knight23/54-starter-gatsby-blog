@@ -1,44 +1,97 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { ArrowRight, Calendar } from 'lucide-vue-next'
 
 const articles = ref([
-  { slug: 'modular-foundations', title: 'Modular Foundations in Web Design', excerpt: 'Exploring the base layer of scalable design systems.', date: 'Dec 15, 2025', category: 'Foundation' },
-  { slug: 'computational-geometry', title: 'Computational Geometry on the Edge', excerpt: 'The math behind ultra-fast rendering pipelines.', date: 'Dec 12, 2025', category: 'Systems' },
-  { slug: 'kinetic-typography', title: 'Kinetic Typography Strategies', excerpt: 'Dynamic motion patterns for modern technical journals.', date: 'Dec 08, 2025', category: 'Design' },
+  { slug: 'raw-html', title: 'Return to Raw HTML', excerpt: 'Why we abandoned semantic markup for div soup.', date: '2026-01-15', category: 'Manifesto' },
+  { slug: 'no-radius', title: 'Against Border Radius', excerpt: 'Sharp edges are honest edges. Roundness is deception.', date: '2026-01-12', category: 'Opinion' },
+  { slug: 'system-fonts', title: 'System Fonts Only', excerpt: 'Web fonts are bloat. Use what is already there.', date: '2026-01-08', category: 'Design' },
+  { slug: 'high-contrast', title: 'Maximum Contrast', excerpt: 'Accessibility through visual aggression.', date: '2026-01-05', category: 'Theory' },
 ])
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto px-10 py-24 space-y-32">
+  <div class="max-w-7xl mx-auto px-0 py-0">
     <!-- Hero -->
-    <header class="max-w-4xl space-y-12">
-       <div class="inline-flex items-center space-x-4">
-          <span class="text-[10px] font-black uppercase tracking-[0.6em] text-arch-accent">Status // Operational</span>
-          <div class="h-px w-20 bg-arch-border dark:bg-white/10"></div>
+    <header class="px-6 py-20 border-b-4 border-black dark:border-white">
+       <div class="flex items-center gap-4 mb-8">
+          <span class="brutal-badge bg-brutal-accent">STATUS: ONLINE</span>
+          <span class="font-mono text-xs font-bold uppercase tracking-widest animate-blink">_</span>
        </div>
-       <h2 class="text-7xl md:text-9xl font-display font-black tracking-tighter leading-[0.8] uppercase dark:text-white">
-          Structural <br />
-          <span class="italic font-light text-arch-accent underline decoration-4 underline-offset-8 decoration-arch-accent/20">Insights.</span>
+
+       <h2 class="brutal-title mb-8">
+          RAW<br/>
+          <span class="bg-brutal-fg text-brutal-bg px-4">HONEST</span><br/>
+          <span class="italic">AESTHETIC</span>
        </h2>
-       <p class="text-2xl text-slate-500 font-medium max-w-xl italic leading-relaxed">
-          Deconstructing the digital built environment through high-performance engineering.
+
+       <p class="font-mono text-lg max-w-xl leading-relaxed mb-12">
+          Deconstructing the digital environment. No smooth transitions. No gradients. No mercy.
        </p>
+
+       <button class="brutal-button flex items-center gap-2">
+          START READING <ArrowRight :size="16" />
+       </button>
     </header>
 
-    <!-- Grid List -->
-    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1px bg-arch-border dark:bg-white/5 border border-arch-border dark:border-white/5">
-       <div v-for="article in articles" :key="article.slug" class="bg-white dark:bg-arch-dark p-12 space-y-10 group cursor-pointer hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors">
-          <div class="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-slate-400">
-             <span class="text-arch-accent">{{ article.category }}</span>
-             <span>{{ article.date }}</span>
-          </div>
-          <div class="space-y-6">
-             <h3 class="text-4xl font-serif font-black leading-tight tracking-tight dark:text-white group-hover:underline decoration-arch-accent transition-all">{{ article.title }}</h3>
-             <p class="text-slate-500 font-medium leading-relaxed italic">{{ article.excerpt }}</p>
-          </div>
-          <router-link :to="'/article/' + article.slug" class="inline-flex items-center text-[10px] font-black uppercase tracking-[0.4em] pt-8 group-hover:text-arch-accent transition-colors">
-             Examine <svg class="ml-3" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    <!-- Featured Article -->
+    <section class="grid lg:grid-cols-2 border-b-4 border-black dark:border-white">
+       <div class="brutal-card !border-0 !rounded-0 !border-r-4 h-full">
+          <div class="brutal-badge bg-brutal-accent mb-6">FEATURED</div>
+          <h3 class="brutal-title text-4xl mb-6">THE MANIFESTO OF BRUTALISM</h3>
+          <p class="font-mono text-sm leading-relaxed mb-8 opacity-80">
+             We return to the source. Before smooth transitions. Before rounded corners. Before the web became a polished shopping mall. This is raw HTML. This is brutal.
+          </p>
+          <router-link to="/article/manifesto" class="brutal-button inline-flex items-center gap-2">
+             READ NOW <ArrowRight :size="16" />
           </router-link>
+       </div>
+
+       <div class="bg-brutal-fg text-brutal-bg p-12 flex flex-col justify-center items-center border-l-4 border-black dark:border-white">
+          <div class="text-9xl font-black mb-4">01</div>
+          <div class="font-mono text-sm font-bold uppercase tracking-widest">JANUARY 2026</div>
+       </div>
+    </section>
+
+    <!-- Articles Grid -->
+    <section class="grid grid-cols-1 md:grid-cols-2">
+       <div v-for="(article, index) in articles" :key="article.slug" class="brutal-card !border-0 !rounded-0 group cursor-pointer">
+          <div class="flex items-center justify-between mb-6">
+             <span class="brutal-badge" :class="index % 2 === 0 ? 'bg-black text-white' : 'bg-brutal-accent'">{{ article.category }}</span>
+             <span class="font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                <Calendar :size="14" /> {{ article.date }}
+             </span>
+          </div>
+
+          <h3 class="brutal-title text-2xl mb-4 group-hover:underline decoration-4">{{ article.title }}</h3>
+
+          <p class="font-mono text-sm leading-relaxed mb-6 opacity-70">
+             {{ article.excerpt }}
+          </p>
+
+          <router-link :to="'/article/' + article.slug" class="brutal-link flex items-center gap-2">
+             READ <ArrowRight :size="14" />
+          </router-link>
+       </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="grid grid-cols-2 md:grid-cols-4 border-t-4 border-black dark:border-white">
+       <div class="brutal-grid-item text-center">
+          <div class="text-5xl font-black mb-2">12</div>
+          <div class="font-mono text-xs font-bold uppercase tracking-widest">ARTICLES</div>
+       </div>
+       <div class="brutal-grid-item text-center">
+          <div class="text-5xl font-black mb-2">3</div>
+          <div class="font-mono text-xs font-bold uppercase tracking-widest">MANIFESTOS</div>
+       </div>
+       <div class="brutal-grid-item text-center">
+          <div class="text-5xl font-black mb-2">0</div>
+          <div class="font-mono text-xs font-bold uppercase tracking-widest">COOKIES</div>
+       </div>
+       <div class="brutal-grid-item text-center">
+          <div class="text-5xl font-black mb-2">100%</div>
+          <div class="font-mono text-xs font-bold uppercase tracking-widest">RAW HTML</div>
        </div>
     </section>
   </div>
