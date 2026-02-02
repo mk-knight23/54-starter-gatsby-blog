@@ -1,102 +1,217 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ArrowRight, Calendar } from 'lucide-vue-next'
+import { ref, onMounted, computed } from 'vue'
+import { useContent } from '../composables/useContent'
+import { Calendar, Clock, ArrowRight } from 'lucide-vue-next'
+import { useHead } from '@vueuse/head'
 
-const articles = ref([
-  { slug: 'raw-html', title: 'Return to Raw HTML', excerpt: 'Why we abandoned semantic markup for div soup.', date: '2026-01-15', category: 'Manifesto' },
-  { slug: 'no-radius', title: 'Against Border Radius', excerpt: 'Sharp edges are honest edges. Roundness is deception.', date: '2026-01-12', category: 'Opinion' },
-  { slug: 'system-fonts', title: 'System Fonts Only', excerpt: 'Web fonts are bloat. Use what is already there.', date: '2026-01-08', category: 'Design' },
-  { slug: 'high-contrast', title: 'Maximum Contrast', excerpt: 'Accessibility through visual aggression.', date: '2026-01-05', category: 'Theory' },
-])
+const { loadAllPosts, getCategories, getTags } = useContent()
+
+const posts = ref<any[]>([])
+const loading = ref(true)
+const selectedCategory = ref<string>('all')
+const selectedTag = ref<string>('all')
+
+const categories = computed(() => getCategories.value)
+const tags = computed(() => getTags.value)
+
+const filteredPosts = computed(() => {
+  let result = posts.value
+
+  if (selectedCategory.value !== 'all') {
+    result = result.filter(post =>
+      post.frontmatter.category.toLowerCase().replace(/\s+/g, '-') === selectedCategory.value
+    )
+  }
+
+  if (selectedTag.value !== 'all') {
+    result = result.filter(post =>
+      post.frontmatter.tags.some(tag =>
+        tag.toLowerCase().replace(/\s+/g, '-') === selectedTag.value
+      )
+    )
+  }
+
+  return result
+})
+
+onMounted(async () => {
+  posts.value = await loadAllPosts()
+  loading.value = false
+})
+
+useHead({
+  title: 'Home | Creative Visual Blog',
+  meta: [
+    { name: 'description', content: 'Explore creative articles on photography, design, and visual storytelling.' }
+  ]
+})
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto px-0 py-0">
-    <!-- Hero -->
-    <header class="px-6 py-20 border-b-4 border-black dark:border-white">
-       <div class="flex items-center gap-4 mb-8">
-          <span class="brutal-badge bg-brutal-accent">STATUS: ONLINE</span>
-          <span class="font-mono text-xs font-bold uppercase tracking-widest animate-blink">_</span>
-       </div>
-
-       <h2 class="brutal-title mb-8">
-          RAW<br/>
-          <span class="bg-brutal-fg text-brutal-bg px-4">HONEST</span><br/>
-          <span class="italic">AESTHETIC</span>
-       </h2>
-
-       <p class="font-mono text-lg max-w-xl leading-relaxed mb-12">
-          Deconstructing the digital environment. No smooth transitions. No gradients. No mercy.
-       </p>
-
-       <button class="brutal-button flex items-center gap-2">
-          START READING <ArrowRight :size="16" />
-       </button>
-    </header>
-
-    <!-- Featured Article -->
-    <section class="grid lg:grid-cols-2 border-b-4 border-black dark:border-white">
-       <div class="brutal-card !border-0 !rounded-0 !border-r-4 h-full">
-          <div class="brutal-badge bg-brutal-accent mb-6">FEATURED</div>
-          <h3 class="brutal-title text-4xl mb-6">THE MANIFESTO OF BRUTALISM</h3>
-          <p class="font-mono text-sm leading-relaxed mb-8 opacity-80">
-             We return to the source. Before smooth transitions. Before rounded corners. Before the web became a polished shopping mall. This is raw HTML. This is brutal.
-          </p>
-          <router-link to="/article/manifesto" class="brutal-button inline-flex items-center gap-2">
-             READ NOW <ArrowRight :size="16" />
+  <div class="max-w-7xl mx-auto px-6 py-12">
+    <!-- Hero Section -->
+    <section class="creative-hero p-12 md:p-20 mb-16 animate-fade-in">
+      <div class="creative-hero-overlay"></div>
+      <div class="relative z-10 text-white">
+        <span class="creative-badge !bg-white !text-creative-accent mb-6 inline-block">
+          Welcome to Creative Blog
+        </span>
+        <h1 class="creative-title text-5xl md:text-7xl mb-6">
+          Visual Stories That<br>Inspire
+        </h1>
+        <p class="text-xl md:text-2xl mb-8 max-w-2xl opacity-90 font-light">
+          Discover the art of photography, design, and creative expression through our curated collection of visual narratives.
+        </p>
+        <div class="flex gap-4">
+          <router-link to="/gallery" class="creative-button bg-white text-creative-accent hover:bg-gray-100">
+            View Gallery
           </router-link>
-       </div>
-
-       <div class="bg-brutal-fg text-brutal-bg p-12 flex flex-col justify-center items-center border-l-4 border-black dark:border-white">
-          <div class="text-9xl font-black mb-4">01</div>
-          <div class="font-mono text-sm font-bold uppercase tracking-widest">JANUARY 2026</div>
-       </div>
+          <router-link to="/about" class="px-6 py-3 rounded-full border-2 border-white text-white hover:bg-white hover:text-creative-accent transition-all">
+            Learn More
+          </router-link>
+        </div>
+      </div>
     </section>
 
-    <!-- Articles Grid -->
-    <section class="grid grid-cols-1 md:grid-cols-2">
-       <div v-for="(article, index) in articles" :key="article.slug" class="brutal-card !border-0 !rounded-0 group cursor-pointer">
-          <div class="flex items-center justify-between mb-6">
-             <span class="brutal-badge" :class="index % 2 === 0 ? 'bg-black text-white' : 'bg-brutal-accent'">{{ article.category }}</span>
-             <span class="font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-                <Calendar :size="14" /> {{ article.date }}
-             </span>
+    <!-- Filters -->
+    <section v-if="!loading" class="mb-12">
+      <div class="flex flex-wrap gap-3 items-center">
+        <span class="text-sm font-semibold text-gray-700 dark:text-gray-300 mr-2">Category:</span>
+        <button
+          @click="selectedCategory = 'all'"
+          class="creative-badge"
+          :class="selectedCategory === 'all' ? '!bg-creative-accent !text-white' : ''"
+        >
+          All
+        </button>
+        <button
+          v-for="category in categories"
+          :key="category.slug"
+          @click="selectedCategory = category.slug"
+          class="creative-badge"
+          :class="selectedCategory === category.slug ? '!bg-creative-accent !text-white' : ''"
+        >
+          {{ category.name }} ({{ category.count }})
+        </button>
+      </div>
+    </section>
+
+    <!-- Loading State -->
+    <div v-if="loading" class="text-center py-20">
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-creative-accent border-t-transparent"></div>
+      <p class="mt-4 text-gray-600 dark:text-gray-400">Loading stories...</p>
+    </div>
+
+    <!-- Posts Grid -->
+    <section v-else class="creative-masonry">
+      <article
+        v-for="post in filteredPosts"
+        :key="post.frontmatter.slug"
+        class="creative-card group cursor-pointer"
+      >
+        <router-link :to="`/article/${post.frontmatter.slug}`">
+          <!-- Featured Image -->
+          <div class="creative-image-container aspect-[4/3] overflow-hidden">
+            <img
+              v-if="post.frontmatter.featuredImage"
+              :src="post.frontmatter.featuredImage"
+              :alt="post.frontmatter.title"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
+            />
+            <div
+              v-else
+              class="w-full h-full bg-gradient-to-br from-creative-accent to-creative-tertiary flex items-center justify-center"
+            >
+              <span class="text-white text-6xl font-display font-bold">
+                {{ post.frontmatter.title.charAt(0) }}
+              </span>
+            </div>
           </div>
 
-          <h3 class="brutal-title text-2xl mb-4 group-hover:underline decoration-4">{{ article.title }}</h3>
+          <!-- Content -->
+          <div class="p-6">
+            <!-- Meta -->
+            <div class="flex items-center gap-4 mb-4 text-sm text-gray-600 dark:text-gray-400">
+              <span class="creative-badge">{{ post.frontmatter.category }}</span>
+              <span class="flex items-center gap-1">
+                <Calendar :size="14" />
+                {{ new Date(post.frontmatter.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}
+              </span>
+              <span class="flex items-center gap-1">
+                <Clock :size="14" />
+                {{ post.readingTime }} min read
+              </span>
+            </div>
 
-          <p class="font-mono text-sm leading-relaxed mb-6 opacity-70">
-             {{ article.excerpt }}
-          </p>
+            <!-- Title -->
+            <h2 class="creative-title text-2xl mb-3 group-hover:text-creative-accent transition-colors">
+              {{ post.frontmatter.title }}
+            </h2>
 
-          <router-link :to="'/article/' + article.slug" class="brutal-link flex items-center gap-2">
-             READ <ArrowRight :size="14" />
-          </router-link>
-       </div>
+            <!-- Excerpt -->
+            <p class="creative-subtitle mb-4 line-clamp-3">
+              {{ post.frontmatter.excerpt }}
+            </p>
+
+            <!-- Tags -->
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span
+                v-for="tag in post.frontmatter.tags.slice(0, 3)"
+                :key="tag"
+                class="text-xs text-gray-500 dark:text-gray-400"
+              >
+                #{{ tag }}
+              </span>
+            </div>
+
+            <!-- Read More -->
+            <span class="inline-flex items-center gap-2 text-creative-accent font-semibold text-sm group-hover:gap-3 transition-all">
+              Read More <ArrowRight :size="16" />
+            </span>
+          </div>
+        </router-link>
+      </article>
     </section>
 
-    <!-- Stats Section -->
-    <section class="grid grid-cols-2 md:grid-cols-4 border-t-4 border-black dark:border-white">
-       <div class="brutal-grid-item text-center">
-          <div class="text-5xl font-black mb-2">12</div>
-          <div class="font-mono text-xs font-bold uppercase tracking-widest">ARTICLES</div>
-       </div>
-       <div class="brutal-grid-item text-center">
-          <div class="text-5xl font-black mb-2">3</div>
-          <div class="font-mono text-xs font-bold uppercase tracking-widest">MANIFESTOS</div>
-       </div>
-       <div class="brutal-grid-item text-center">
-          <div class="text-5xl font-black mb-2">0</div>
-          <div class="font-mono text-xs font-bold uppercase tracking-widest">COOKIES</div>
-       </div>
-       <div class="brutal-grid-item text-center">
-          <div class="text-5xl font-black mb-2">100%</div>
-          <div class="font-mono text-xs font-bold uppercase tracking-widest">RAW HTML</div>
-       </div>
+    <!-- Empty State -->
+    <section v-if="!loading && filteredPosts.length === 0" class="text-center py-20">
+      <p class="text-gray-600 dark:text-gray-400 text-lg">No stories found matching your filters.</p>
+      <button
+        @click="selectedCategory = 'all'; selectedTag = 'all'"
+        class="creative-button mt-4"
+      >
+        Clear Filters
+      </button>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="mt-20 creative-card !bg-gradient-to-br !from-creative-accent !to-creative-tertiary !border-0">
+      <div class="p-12 text-center text-white">
+        <h2 class="creative-title text-4xl mb-4">Stay Inspired</h2>
+        <p class="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
+          Get the latest creative stories, photography tips, and design inspiration delivered to your inbox.
+        </p>
+        <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+          <input
+            type="email"
+            placeholder="your@email.com"
+            class="creative-input flex-1 !bg-white !text-creative-accent !border-0"
+          />
+          <button type="submit" class="creative-button !bg-creative-accent-hover !text-white">
+            Subscribe
+          </button>
+        </form>
+      </div>
     </section>
   </div>
 </template>
 
 <style scoped>
-.gap-1px { gap: 1px; }
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 </style>
