@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -23,8 +24,13 @@
   --animate-zoom: zoom 0.3s ease-out;
 
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
   }
 
   @keyframes slideUp {
@@ -32,6 +38,7 @@
       opacity: 0;
       transform: translateY(20px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -39,8 +46,13 @@
   }
 
   @keyframes zoom {
-    from { transform: scale(1); }
-    to { transform: scale(1.05); }
+    from {
+      transform: scale(1);
+    }
+
+    to {
+      transform: scale(1.05);
+    }
   }
 }
 
@@ -66,6 +78,7 @@ body {
 }
 
 @layer components {
+
   /* Container */
   .creative-container {
     @apply min-h-screen flex flex-col;
@@ -176,7 +189,7 @@ body {
 
   .creative-hero-overlay {
     @apply absolute inset-0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%);
   }
 
   /* Image Styles */
