@@ -1,4 +1,4 @@
-# BRUTAL. | Raw Web Aesthetic Blog
+# BRUTAL. | Raw Web Aesthetic Blog (Vue 3 + Vite)
 
 <div align="center">
 
@@ -9,9 +9,17 @@
 
 **A brutalist web design blog starter built with Vue 3, Vite-SSG, and Tailwind CSS v4**
 
-[Live Demo](https://54-starter-gatsby-blog.vercel.app) ✅ | [GitHub](https://github.com/mk-knight23/57-Gatsby-Blog-Starter)
+[Firebase Live Demo](https://clock1-7df37.web.app) ✅ | [GitHub](https://github.com/mk-knight23/57-Gatsby-Blog-Starter)
 
 </div>
+
+---
+
+## Deployment Status
+
+- **Firebase**: Deployed ✅
+- **Render**: Configured (push to deploy) ⏳
+- **Amplify**: Configured (Account Limit Reached) ⚠️
 
 ---
 
