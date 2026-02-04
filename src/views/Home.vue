@@ -4,7 +4,7 @@ import { useContent } from '../composables/useContent'
 import { Calendar, Clock, ArrowRight } from 'lucide-vue-next'
 import { useHead } from '@vueuse/head'
 
-const { loadAllPosts, getCategories, getTags } = useContent()
+const { loadAllPosts, getCategories } = useContent()
 
 const posts = ref<any[]>([])
 const loading = ref(true)
@@ -12,7 +12,6 @@ const selectedCategory = ref<string>('all')
 const selectedTag = ref<string>('all')
 
 const categories = computed(() => getCategories.value)
-const tags = computed(() => getTags.value)
 
 const filteredPosts = computed(() => {
   let result = posts.value
@@ -25,7 +24,7 @@ const filteredPosts = computed(() => {
 
   if (selectedTag.value !== 'all') {
     result = result.filter(post =>
-      post.frontmatter.tags.some(tag =>
+      post.frontmatter.tags.some((tag: string) =>
         tag.toLowerCase().replace(/\s+/g, '-') === selectedTag.value
       )
     )

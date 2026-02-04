@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import matter from 'gray-matter'
 import MarkdownIt from 'markdown-it'
-import type { Post, PostFrontmatter, Category } from '../types/content'
+import type { Post, PostFrontmatter } from '../types/content'
 
 const md = new MarkdownIt({
   html: true,
