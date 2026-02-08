@@ -1,5 +1,10 @@
 import { ref, computed } from 'vue'
 import matter from 'gray-matter'
+
+const matterOptions = {
+  safe: true,
+  excerpt_separator: '<!-- excerpt -->'
+}
 import MarkdownIt from 'markdown-it'
 import type { Post, PostFrontmatter } from '../types/content'
 
@@ -28,7 +33,7 @@ export function useContent() {
    * Parse markdown file with frontmatter
    */
   const parseMarkdown = (raw: string): Post => {
-    const { data, content } = matter(raw)
+    const { data, content } = matter(raw, matterOptions)
     const frontmatter = data as PostFrontmatter
     const htmlContent = md.render(content)
 
@@ -51,14 +56,14 @@ export function useContent() {
     try {
       // In a real implementation, this would fetch from an API or import modules
       // For now, we'll use a dynamic import pattern
-      const modules = import.meta.glob('/content/posts/**/*.md', { as: 'raw' })
+      const modules = import.meta.glob('/content/posts/**/*.md', { query: '?raw', import: 'default' })
       const postPath = `/content/posts/${slug}.md`
 
       if (!modules[postPath]) {
         return null
       }
 
-      const raw = await modules[postPath]()
+      const raw = await modules[postPath]() as string
       const post = parseMarkdown(raw)
       postsCache.value.set(slug, post)
       return post
@@ -77,7 +82,7 @@ export function useContent() {
     }
 
     try {
-      const modules = import.meta.glob('/content/posts/**/*.md', { as: 'raw' })
+      const modules = import.meta.glob('/content/posts/**/*.md', { query: '?raw', import: 'default' })
       const posts: Post[] = []
 
       for (const path in modules) {

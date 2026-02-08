@@ -1,11 +1,13 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
+    tailwindcss(),
     // Progressive Web App support
     VitePWA({
       registerType: 'autoUpdate',
@@ -32,6 +34,14 @@ export default defineConfig({
       }
     })
   ],
+  resolve: {
+    alias: {
+      buffer: 'buffer/',
+    },
+  },
+  define: {
+    global: 'globalThis',
+  },
   build: {
     // Optimize chunk splitting
     rollupOptions: {

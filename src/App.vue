@@ -11,7 +11,7 @@ const initTheme = () => {
   if (saved) {
     isDarkMode.value = saved === 'dark'
   } else {
-    isDarkMode.value = !window.matchMedia('(prefers-color-scheme: light)').matches
+    isDarkMode.value = window.matchMedia('(prefers-color-scheme: dark)').matches
   }
   applyTheme()
 }
